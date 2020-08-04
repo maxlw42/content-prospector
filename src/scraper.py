@@ -1,3 +1,4 @@
+import classifier
 import praw
 import yaml
 import io
@@ -6,10 +7,11 @@ class ContentScraper:
     def __init__(self):
         self.reddit = praw.Reddit('me')
         self.subs_and_keywords = self.parse_subs_and_keywords()
+        self.content_filter = classifier.ContentClassifier(self.subs_and_keywords)
 
     def parse_subs_and_keywords(self):
         # load in yaml file containing desired subs and keywords
-        with open("../../content.yaml", 'r') as stream:
+        with open("../content.yaml", 'r') as stream:
             subs_and_keywords = yaml.safe_load(stream)
         return subs_and_keywords
 
@@ -23,4 +25,3 @@ class ContentScraper:
 if __name__ == "__main__":
     scraper = ContentScraper()
     scraper.stream_content();
-    
