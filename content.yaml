@@ -1,8 +1,7 @@
 ---
-subreddits:
-  Coronavirus:
-    - keyword1
-    - keyword2
-  CoronavirusRecession:
-    - keyword3
-    - keyword4
+Coronavirus:
+  - keyword1
+  - keyword2
+CoronavirusRecession:
+  - keyword3
+  - keyword4

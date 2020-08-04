@@ -1,19 +1,26 @@
 import praw
 import yaml
+import io
 
-class ContentStream:
+class ContentScraper:
     def __init__(self):
         self.reddit = praw.Reddit('me')
+        self.subs_and_keywords = self.parse_subs_and_keywords()
 
-    def streamIt(self):
-        # login to Reddit with creds from .ini file
-    
+    def parse_subs_and_keywords(self):
+        # load in yaml file containing desired subs and keywords
+        with open("../../content.yaml", 'r') as stream:
+            subs_and_keywords = yaml.safe_load(stream)
+        return subs_and_keywords
+
+    def stream_content(self):
         # use streams for submissions, search somehow
-        for submission in self.reddit.subreddit("pics").stream.submissions():
+        subs_as_string = "+".join(self.subs_and_keywords.keys())
+        for submission in self.reddit.subreddit(subs_as_string).stream.submissions():
             print(submission.subreddit.display_name + " : " + submission.title)
     
 
 if __name__ == "__main__":
-    stream = ContentStream()
-    stream.streamIt();
+    scraper = ContentScraper()
+    scraper.stream_content();
     
