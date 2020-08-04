@@ -1,9 +1,19 @@
 import praw
+import yaml
 
-def redditAuth():
-    # login to Reddit with creds from .ini file
-    reddit = praw.Reddit('me')
+class ContentStream:
+    def __init__(self):
+        self.reddit = praw.Reddit('me')
+
+    def streamIt(self):
+        # login to Reddit with creds from .ini file
+    
+        # use streams for submissions, search somehow
+        for submission in self.reddit.subreddit("pics").stream.submissions():
+            print(submission.subreddit.display_name + " : " + submission.title)
     
 
 if __name__ == "__main__":
-    redditAuth();
+    stream = ContentStream()
+    stream.streamIt();
+    
