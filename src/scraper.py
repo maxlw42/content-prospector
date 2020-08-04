@@ -19,7 +19,8 @@ class ContentScraper:
         # use streams for submissions, search somehow
         subs_as_string = "+".join(self.subs_and_keywords.keys())
         for submission in self.reddit.subreddit(subs_as_string).stream.submissions():
-            print(submission.subreddit.display_name + " : " + submission.title)
+            if self.content_filter.is_relevant_submission(submission):
+                print(submission.title)
     
 
 if __name__ == "__main__":
