@@ -1,4 +1,4 @@
 # content-prospector
-A tool that searches recent reddit posts and comments for user-specified keywords and sends the user a push notification for each such post
+A tool that searches recent reddit posts and comments for user-specified keywords and sends the user an email when it finds a relevant post
 
-Can specify subreddits and keywords you want to be monitored in content.yaml file
+Subreddits and corresponding keywords to monitor are defined in the content.yaml file 

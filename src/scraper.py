@@ -15,6 +15,7 @@ class ContentScraper:
         # load in yaml file containing desired subs and keywords
         with open("../content.yaml", 'r') as stream:
             subs_and_keywords = yaml.safe_load(stream)
+        subs_and_keywords = {k.lower() : v for k, v in subs_and_keywords.items()}
         return subs_and_keywords
 
     def validate_sub_names(self):
@@ -26,7 +27,7 @@ class ContentScraper:
                 sub_id = self.reddit.subreddit(sub_name).id
             except prawcore.exceptions.Redirect:
                 subs_are_valid = False
-                logging.error(sub_name + " is an invalid subreddit name.")
+                logging.error(sub_name + " is an invalid subreddit name in content.yaml.")
         return subs_are_valid
 
     def stream_content(self):

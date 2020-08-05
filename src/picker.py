@@ -6,11 +6,11 @@ class ContentPicker:
 
     def title_is_relevant(self, submission, keyword):
         title = submission.title
-        return title.find(keyword) != -1
+        return keyword.lower() in title.lower().split()
     
     def body_is_relevant(self, submission, keyword):
         body = submission.selftext
-        return body.find(keyword) != -1
+        return keyword.lower() in body.lower().split()
 
     def submission_is_relevant(self, submission):
         sub = submission.subreddit
