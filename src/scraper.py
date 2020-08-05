@@ -1,4 +1,4 @@
-import classifier
+import picker
 import praw
 import yaml
 import io
@@ -7,7 +7,7 @@ class ContentScraper:
     def __init__(self):
         self.reddit = praw.Reddit('me')
         self.subs_and_keywords = self.parse_subs_and_keywords()
-        self.content_filter = classifier.ContentClassifier(self.subs_and_keywords)
+        self.content_filter = picker.ContentPicker(self.subs_and_keywords)
 
     def parse_subs_and_keywords(self):
         # load in yaml file containing desired subs and keywords

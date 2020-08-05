@@ -1,2 +1,3 @@
 *dependencies/
 *praw.ini
+*__pycache__/
