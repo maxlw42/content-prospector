@@ -1,3 +1,4 @@
+import io
 
 class ContentPicker:
     def __init__(self, subs_to_keywords):
