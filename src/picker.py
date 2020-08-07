@@ -1,4 +1,4 @@
-import io
+import praw
 
 class ContentPicker:
     def __init__(self, subs_to_keywords):
