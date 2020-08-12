@@ -1,5 +1,6 @@
 import picker
 import notifier
+import parser
 import praw
 import yaml
 import io
@@ -8,17 +9,20 @@ import prawcore.exceptions
 
 class ContentScraper:
     def __init__(self):
-        self.reddit = praw.Reddit('me')
-        self.subs_and_keywords = self.parse_subs_and_keywords()
-        self.content_filter = picker.ContentPicker(self.subs_and_keywords)
+        # use a config parser to extract relevant parameters and credentials to login
+        self.config_parser = parser.ConfigParser()
+        self.subs_and_keywords = self.config_parser.parse_subs_and_keywords()
+        reddit_credentials = self.config_parser.parse_reddit_credentials()
+        self.reddit = praw.Reddit(client_id=reddit_credentials['client_id'],
+                                  client_secret=reddit_credentials['client_secret'],
+                                  user_agent=reddit_credentials['user_agent'],
+                                  username=reddit_credentials['username'],
+                                  password=reddit_credentials['password'])
+
+        # modules for selecting relevant submissions and notifying user of submission
+        self.content_picker = picker.ContentPicker(self.subs_and_keywords)
         self.content_notifier = notifier.ContentNotifier()
-        
-    def parse_subs_and_keywords(self):
-        # load in yaml file containing desired subs and keywords
-        with open("../content.yaml", 'r') as stream:
-            subs_and_keywords = yaml.safe_load(stream)
-        subs_and_keywords = {k.lower() : v for k, v in subs_and_keywords.items()}
-        return subs_and_keywords
+    
 
     def validate_sub_names(self):
         subs_are_valid = True
@@ -40,7 +44,7 @@ class ContentScraper:
         # use streams for submissions, search somehow
         subs_as_string = "+".join(self.subs_and_keywords.keys())
         for submission in self.reddit.subreddit(subs_as_string).stream.submissions():
-            if self.content_filter.submission_is_relevant(submission):
+            if self.content_picker.submission_is_relevant(submission):
                 print(submission.title)
     
 
