@@ -1,4 +1,5 @@
 import praw
+import parser
 import smtplib
 import ssl
 from email.mime.text import MIMEText
@@ -6,14 +7,18 @@ from email.mime.multipart import MIMEMultipart
 
 class ContentNotifier:
     def __init__(self):
-        self.password = None
+        config_parser = parser.ConfigParser()
+        email_credentials = config_parser.parse_email_credentials()
+        self.sender_email = email_credentials['sender_email']
+        self.sender_password = email_credentials['sender_password']
+        self.receiver_email = email_credentials['receiver_email']
 
     def create_email(self, sender_email, receiver_email, submission):
         # Define contents of email notification
         message = MIMEMultipart("alternative")
         message["Subject"] = "Content Prospector found a gem"
-        message["From"] = sender_email
-        message["To"] = receiver_email
+        message["From"] = self.sender_email
+        message["To"] = self.receiver_email
 
         """
         email_header = "Content Prospector found a submission of interest on r/" + submission.subreddit
@@ -43,21 +48,18 @@ class ContentNotifier:
         return message.as_string()
 
     def send_email_notification(self, submission):
-        # Data needed to establish connection and send email
-        port = 465  # For SSL
-        sender_email = input("Type the sender of the email: ")
-        sender_password = input("Type the sender's password: ")
-        receiver_email = input("Type the receiver's email: ")
+        # Data needed to establish SSL connection and send email
+        port = 465
 
         # Create email with content
-        email_notification = self.create_email(sender_email, receiver_email, submission)
+        email_notification = self.create_email(self.sender_email, self.receiver_email, submission)
 
         # Create a secure SSL context
         context = ssl.create_default_context()
 
         with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
-            server.login(sender_email, sender_password)
-            server.sendmail(sender_email, receiver_email, email_notification)
+            server.login(self.sender_email, self.sender_password)
+            server.sendmail(self.sender_email, self.receiver_email, email_notification)
 
 if __name__ == "__main__":
     c = ContentNotifier()

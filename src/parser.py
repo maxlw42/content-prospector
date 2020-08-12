@@ -18,6 +18,10 @@ class ConfigParser:
 
     def parse_reddit_credentials(self):
         # load in yaml file containing reddit credentials
-        yaml_content = self.parse_config_yaml("../config/secrets/creds.yaml")
+        yaml_content = self.parse_config_yaml("../config/secrets/reddit-creds.yaml")
+        return yaml_content
+
+    def parse_email_credentials(self):
+        yaml_content = self.parse_config_yaml("../config/secrets/email-creds.yaml")
         return yaml_content
     
