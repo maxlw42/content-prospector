@@ -28,11 +28,9 @@ class ContentNotifier:
         <html>
             <body>
                 <h3>{0}</h3>
-                <h4>{1}</h4>
-                <h5>
-                    The submission can be found 
-                    <a href="{2}">here</a> 
-                </h5>
+                <h4>
+                    <a href="{2}">{1}</a>
+                <h4>
             </body>
         </html>
         """
