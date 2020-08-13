@@ -20,23 +20,19 @@ class ContentNotifier:
         message["From"] = self.sender_email
         message["To"] = self.receiver_email
 
-        """
-        email_header = "Content Prospector found a submission of interest on r/" + submission.subreddit
-        submission_title = "Title: " + submission.title
+        email_header = "Content Prospector found a submission of interest on r/" + submission.subreddit.display_name
+        submission_title = submission.title
         submission_url = submission.url
-        """
-
-        email_header = "Email Header"
-        submission_title = "Submission title"
-        submission_url = "https://www.google.com"
-
+    
         html = """\
         <html>
             <body>
                 <h3>{0}</h3>
                 <h4>{1}</h4>
-                The submission can be found 
-                <a href="{2}">here</a> 
+                <h5>
+                    The submission can be found 
+                    <a href="{2}">here</a> 
+                </h5>
             </body>
         </html>
         """

@@ -1,9 +1,6 @@
 import yaml
 
 class ConfigParser:
-    def __init__(self):
-        print(None)
-
     def parse_config_yaml(self, path_to_file):
         config_content = {}
         with open(path_to_file, 'r') as stream:
