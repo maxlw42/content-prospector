@@ -6,19 +6,19 @@ class ContentPicker:
 
     def title_is_relevant(self, submission, keyword):
         title = submission.title
-        return keyword.lower() in title.lower().split()
+        return keyword.lower() in title.lower()
     
     def body_is_relevant(self, submission, keyword):
         body = submission.selftext
-        return keyword.lower() in body.lower().split()
+        return keyword.lower() in body.lower()
 
     def submission_is_relevant(self, submission):
         sub = submission.subreddit
         sub_title = sub.display_name
-        keywords = self.subs_to_keywords[sub_title]
-        for keyword in keywords:
-            body_relevant = self.body_is_relevant(submission, keyword)
-            title_relevant = self.title_is_relevant(submission, keyword)
+        keywords_and_phrases = self.subs_to_keywords[sub_title]
+        for keystr in keywords_and_phrases:
+            body_relevant = self.body_is_relevant(submission, keystr)
+            title_relevant = self.title_is_relevant(submission, keystr)
             if body_relevant or title_relevant:
                 return True 
         return False
