@@ -45,7 +45,6 @@ class ContentScraper:
         subs_as_string = "+".join(self.subs_and_keywords.keys())
         for submission in self.reddit.subreddit(subs_as_string).stream.submissions():
             if self.content_picker.submission_is_relevant(submission):
-                print(submission.title)
                 self.content_notifier.send_email_notification(submission)
     
 
