@@ -18,9 +18,3 @@ class VisitedSubmissionList:
     def clear_submission_list(self):
         self.client.drop_database('content_prospector')
 
-
-if __name__ == "__main__":
-    list = VisitedSubmissionList()
-    list.insert_submission_id("345272")
-    print(list.check_submission_id("345272"))
-    list.clear_submission_list()

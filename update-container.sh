@@ -1,12 +1,6 @@
 #!/bin/sh
-CONTAINER_NAME=$1
+CONTAINER_NAME=docker_content_prospector
 IMAGE_NAME=content-prospector
-
-if [ -z "$CONTAINER_NAME" ]
-then
-      echo "Error: no container name specified to update"
-      exit 1
-fi
 
 # remove existing resources
 echo "Stopping old container..."
@@ -20,4 +14,4 @@ docker image rm ${IMAGE_NAME}
 echo "Building new image..."
 docker build -t ${IMAGE_NAME} .
 echo "Starting new container..."
-docker run -dp 1544:1544 ${IMAGE_NAME}
+docker run --name ${CONTAINER_NAME} -dp 1544:1544 ${IMAGE_NAME}

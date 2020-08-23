@@ -1,6 +1,10 @@
 ---
 FrugalMaleFashion:
-  - patagonia
-  - hanes short sleeve
+  - AND(patagonia better sweater, sale, cheap)
+  - OR(common, projects)
+News:
+  - beirut explosion
+  - AND(beirut, explosion)
+  - coronavirus
 
 
