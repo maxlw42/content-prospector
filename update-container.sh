@@ -14,4 +14,4 @@ docker image rm ${IMAGE_NAME}
 echo "Building new image..."
 docker build -t ${IMAGE_NAME} .
 echo "Starting new container..."
-docker run --name ${CONTAINER_NAME} -dp 1544:1544 ${IMAGE_NAME}
+docker run --link mongo_db:mongo --name ${CONTAINER_NAME} -dp 1544:1544 ${IMAGE_NAME}

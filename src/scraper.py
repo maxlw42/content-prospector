@@ -23,8 +23,9 @@ class ContentScraper:
         # modules for selecting relevant submissions and notifying user of submission
         self.content_picker = picker.ContentPicker(self.subs_and_keywords)
         self.content_notifier = notifier.ContentNotifier()
+        self.visited_submission_storage = storage.VisitedSubmissionStorage()
     
-
+    # determine if the subreddit names in config file are valid
     def validate_sub_names(self):
         subs_are_valid = True
         sub_names = self.subs_and_keywords.keys()
@@ -37,6 +38,7 @@ class ContentScraper:
                 logging.error(sub_name + " is an invalid subreddit name in content.yaml.")
         return subs_are_valid
 
+    # continuously notify user of new relevant content from subreddits based on keywords/phrases
     def stream_content(self):
         # validate subreddits in content.yaml before streaming
         if not self.validate_sub_names():
@@ -45,8 +47,13 @@ class ContentScraper:
         # use streams for submissions, search somehow
         subs_as_string = "+".join(self.subs_and_keywords.keys())
         for submission in self.reddit.subreddit(subs_as_string).stream.submissions():
-            if self.content_picker.submission_is_relevant(submission):
+            # send submission if content is relevant AND submission has not been sent to user previously
+            submission_is_relevant = self.content_picker.submission_is_relevant(submission)
+            submission_is_visited = self.visited_submission_storage.check_submission_id(submission.id)
+            if submission_is_relevant and not submission_is_visited:
+                 # send notification and mark submission as visited to avoid notifying twice
                 self.content_notifier.send_email_notification(submission)
+                self.visited_submission_storage.mark_submission_id(submission.id)
     
 
 if __name__ == "__main__":
