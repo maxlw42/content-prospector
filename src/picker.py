@@ -15,7 +15,7 @@ class ContentPicker:
 
     def submission_is_relevant(self, submission):
         sub = submission.subreddit
-        sub_title = sub.display_name
+        sub_title = sub.display_name.lower()
         keywords_and_phrases = self.subs_to_keywords[sub_title]
         for keystr in keywords_and_phrases:
             body_relevant = self.body_is_relevant(submission, keystr)

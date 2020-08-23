@@ -1,10 +1,8 @@
 ---
 FrugalMaleFashion:
-  - AND(patagonia better sweater, sale, cheap)
-  - OR(common, projects)
+  - uniqlo
 News:
-  - beirut explosion
-  - AND(beirut, explosion)
-  - coronavirus
+  - college
+  - students
 
 

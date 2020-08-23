@@ -5,7 +5,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - "~/data:/data/db:rw"
+      - "~/data:/data/db"
   content_prospector:
     build: .
     links:
