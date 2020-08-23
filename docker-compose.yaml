@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  mongo_db:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - "~/data:/data/db:rw"
+  content_prospector:
+    build: .
+    links:
+      - "mongo_db:mongo"
+    ports:
+      - "1544:1544"
