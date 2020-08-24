@@ -5,8 +5,15 @@ class ContentPicker:
     def __init__(self, subs_to_keywords):
         self.subs_to_keywords = subs_to_keywords
 
-    def text_contains_word(self, text_word_list, word):
-        return word.lower() in text_word_list
+    def is_close_match(self, text_a, text_b):
+        return lev.distance(text_a, text_b) <= 2
+
+    def text_contains_word(self, text, word):
+        text_word_list = text.lower().split()
+        for i in range(len(text_word_list)):
+            if self.is_close_match(text_word_list[i], word):
+                return True
+        return False
 
     def text_contains_phrase(self, text, phrase):
         text_word_list = text.lower().split()
@@ -17,7 +24,7 @@ class ContentPicker:
         num_iterations = text_len - phrase_len + 1
         for i in range(num_iterations):
             joined_words_in_text = "+".join(text_word_list[i:i+phrase_len])
-            if joined_words_in_text == joined_phrase:
+            if self.is_close_match(joined_words_in_text, joined_phrase):
                 return True
         return False 
     
