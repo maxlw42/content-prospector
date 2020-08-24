@@ -1,4 +1,5 @@
 import praw
+import parsing
 import Levenshtein as lev
 
 class ContentPicker:
@@ -28,20 +29,27 @@ class ContentPicker:
                 return True
         return False 
     
-    def text_is_relevant(self, text, keyword):
-        keyword_is_phrase = len(keyword.split()) > 1
-        if keyword_is_phrase:
-            return self.text_contains_phrase(text, keyword)
+    def text_is_relevant(self, text, keyword_query):
+
+        if keyword_is_phrase_query:
+            return self.text_contains_phrase(text, keyword_query.query_text)
+        elif keyword_is_word_query:
+            return self.text_contains_word(text, keyword_query.query_text)
+        elif keyword_is_and_query:
+            return None
+        elif keyword_is_or_query:
+            return None
         else:
-            return self.text_contains_word(text, keyword)
+            raise ValueError("There is an invalid keyword in content.yaml")
+        
 
     def submission_is_relevant(self, submission):
         sub = submission.subreddit
         sub_title = sub.display_name.lower()
         keywords_and_phrases = self.subs_to_keywords[sub_title]
-        for keystr in keywords_and_phrases:
-            body_relevant = self.text_is_relevant(submission.selftext, keystr)
-            title_relevant = self.text_is_relevant(submission.title, keystr)
+        for keyword_query in keywords_and_phrases:
+            body_relevant = self.text_is_relevant(submission.selftext, keyword_query)
+            title_relevant = self.text_is_relevant(submission.title, keyword_query)
             if body_relevant or title_relevant:
                 return True 
         return False
