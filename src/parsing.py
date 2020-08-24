@@ -31,24 +31,28 @@ class ConfigParser:
         yaml_content = self.parse_config_yaml("./secrets/email-creds.yaml")
         return yaml_content
 
-class SingleQuery:
-    def __init__(self, query_text, query_type):
-        self.query_text = query_text
+class Query:
+    def __init__(self, query_type):
         self.type = query_type
 
     def is_word_query(self):
         return query_type is "WORD"
-    
+
     def is_phrase_query(self):
         return query_type is "PHRASE"
 
-class MultiQuery():
-    def __init(self, single_query_list, query_type):
-        self.query_text_list = query_text_list
-        self.query_type = query_type
-
     def is_and_query(self):
         return query_type is "AND"
-    
+
     def is_or_query(self):
         return query_type is "OR"
+
+class SingleQuery(Query):
+    def __init__(self, query_text, query_type):
+        super(query_type)
+        self.query_text = query_text
+
+class MultiQuery(Query):
+    def __init(self, single_query_list, query_type):
+        super(query_type)
+        self.query_text_list = query_text_list
