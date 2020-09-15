@@ -62,16 +62,10 @@ class SingleQuery(Query):
         super().__init__(query_type)
         self.query_text = query_text
 
-    def get_query_text(self):
-        return self.query_text
-
 class MultiQuery(Query):
     def __init__(self, query_text_list, query_type):
         super().__init__(query_type)
         self.query_text_list = query_text_list
-
-    def get_query_text_list(self):
-        return self.query_text_list
 
 if __name__ == "__main__":
     parser = ConfigParser()

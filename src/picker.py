@@ -29,20 +29,38 @@ class ContentPicker:
             if self.is_close_match(joined_words_in_text, joined_phrase):
                 return True
         return False 
-    
-    def text_is_relevant(self, text, keyword_query):
 
-        if self.parser.is_phrase:
-            return self.text_contains_phrase(text, keyword_query.query_text)
-        elif keyword_is_word_query:
-            return self.text_contains_word(text, keyword_query.query_text)
-        elif keyword_is_and_query:
-            return None
-        elif keyword_is_or_query:
-            return None
+
+    def text_contains_one_of(self, text, keyword_list):
+        text_contains_one = False
+        for keyword in keyword_list:
+            if len(keyword.split(" ")) > 1 and self.text_contains_phrase(keyword):
+                text_contains_one = True
+            elif self.text_contains_word(keyword):
+                text_contains_one = True
+        return text_contains_one
+    
+    def text_contains_all_of(self, text, keyword_list):
+        text_contains_all = True
+        for keyword in keyword_list:
+            if len(keyword.split(" ")) > 1 and not self.text_contains_phrase(keyword):
+                text_contains_all = False
+            elif not self.text_contains_word(keyword):
+                text_contains_all = False
+        return text_contains_all
+
+    
+    def text_is_relevant(self, text, query):
+        if query.is_phrase_query():
+            return self.text_contains_phrase(text, query.query_text)
+        elif query.is_word_query():
+            return self.text_contains_word(text, query.query_text)
+        elif query.is_and_query():
+            return self.text_contains_all_of(text, query.keyword_list)
+        elif query.is_or_query():
+            return self.text_contains_one_of(text, query.keyword_list)
         else:
             raise ValueError("There is an invalid keyword in content.yaml")
-        
 
     def submission_is_relevant(self, submission):
         sub = submission.subreddit
