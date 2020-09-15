@@ -19,8 +19,18 @@ class ConfigParser:
             subs_and_keywords[sub.lower()] = parsed_query_list
         return subs_and_keywords
 
-    def parse_query(self):
-        return None
+    def parse_query(self, query):
+        query_len = len(query)
+        if query_len >= 5 and query[0:4] == "~OR(" and query[query_len - 1:] == ")":
+            keyword_list = query[4:query_len - 1].split(",")
+            return MultiQuery(keyword_list, "OR")
+        elif query_len >= 6 and query[0:5] == "~AND(" and query[query_len - 1:] == ")":
+            keyword_list = query[4:query_len - 1].split(",")
+            return MultiQuery(keyword_list, "AND")
+        elif len(query.split()) > 1:
+            return SingleQuery(query, "PHRASE")
+        else:
+            return SingleQuery(query, "WORD")
 
     def parse_reddit_credentials(self):
         # load in yaml file containing reddit credentials
@@ -33,26 +43,43 @@ class ConfigParser:
 
 class Query:
     def __init__(self, query_type):
-        self.type = query_type
+        self.query_type = query_type
 
     def is_word_query(self):
-        return query_type is "WORD"
+        return self.query_type is "WORD"
 
     def is_phrase_query(self):
-        return query_type is "PHRASE"
+        return self.query_type is "PHRASE"
 
     def is_and_query(self):
-        return query_type is "AND"
+        return self.query_type is "AND"
 
     def is_or_query(self):
-        return query_type is "OR"
+        return self.query_type is "OR"
 
 class SingleQuery(Query):
     def __init__(self, query_text, query_type):
-        super(query_type)
+        super().__init__(query_type)
         self.query_text = query_text
 
+    def get_query_text(self):
+        return self.query_text
+
 class MultiQuery(Query):
-    def __init(self, single_query_list, query_type):
-        super(query_type)
+    def __init__(self, query_text_list, query_type):
+        super().__init__(query_type)
         self.query_text_list = query_text_list
+
+    def get_query_text_list(self):
+        return self.query_text_list
+
+if __name__ == "__main__":
+    parser = ConfigParser()
+    query_one = parser.parse_query("~AND(h, x)")
+    query_two = parser.parse_query("~OR(h t,x,j)")
+    query_three = parser.parse_query("bubble blower")
+    query_four = parser.parse_query("bubble")
+    print(query_one.is_and_query())
+    print(query_two.is_or_query())
+    print(query_three.is_phrase_query())
+    print(query_four.is_word_query())

@@ -5,6 +5,7 @@ import Levenshtein as lev
 class ContentPicker:
     def __init__(self, subs_to_keywords):
         self.subs_to_keywords = subs_to_keywords
+        self.parser = ConfigParser()
 
     def is_close_match(self, text_a, text_b):
         return lev.distance(text_a, text_b) <= 2
@@ -31,7 +32,7 @@ class ContentPicker:
     
     def text_is_relevant(self, text, keyword_query):
 
-        if keyword_is_phrase_query:
+        if self.parser.is_phrase:
             return self.text_contains_phrase(text, keyword_query.query_text)
         elif keyword_is_word_query:
             return self.text_contains_word(text, keyword_query.query_text)
